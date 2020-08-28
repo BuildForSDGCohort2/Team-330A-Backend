@@ -10,6 +10,9 @@ class Category extends Model
 {
     use Sluggable;
     use SluggableScopeHelpers;
+
+    protected $fillable = ['name','description'];
+
     public function sluggable()
     {
         return [
