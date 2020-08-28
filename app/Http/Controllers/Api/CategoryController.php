@@ -12,7 +12,7 @@ class CategoryController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:api')->except(['index','show']);
+        $this->middleware('auth:api')->except(['index', 'show']);
     }
     /**
      * Display a listing of the resource.
@@ -62,10 +62,17 @@ class CategoryController extends Controller
     public function update(Request $request, $slug)
     {
         $category = Category::findBySlug($slug);
-        $category->update($request->validate([
-            'name' => 'string|required|unique:categories',
-            'description' => 'string|required',
-        ]));
+        if ($request->method() == "PUT") {
+            $category->update($request->validate([
+                'name' => 'string|required|unique:categories',
+                'description' => 'string|required',
+            ]));
+        } elseif ($request->method() == "PATCH") {
+            $category->update($request->validate([
+                'name' => 'string|unique:categories',
+                'description' => 'string',
+            ]));
+        }
         return new CategoryResource($category);
     }
 
